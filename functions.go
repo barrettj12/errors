@@ -27,7 +27,15 @@ func New(message string) error {
 //    return errors.Errorf("validation failed: %s", message)
 //
 func Errorf(format string, args ...interface{}) error {
-	err := &Err{message: fmt.Sprintf(format, args...)}
+	errf := fmt.Errorf(format, args...)
+	err := &Err{message: errf.Error()}
+
+	// Use %w formatting directive
+	if u, ok := errf.(interface{ Unwrap() error }); ok {
+		err.previous = u.Unwrap()
+		err.cause = u.Unwrap()
+	}
+
 	err.SetLocation(1)
 	return err
 }
