@@ -18,7 +18,7 @@ import (
 //
 func New(message string) error {
 	err := &Err{message: message}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -30,7 +30,7 @@ func New(message string) error {
 //
 func Errorf(format string, args ...interface{}) error {
 	err := &Err{message: fmt.Sprintf(format, args...)}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -60,7 +60,7 @@ func Trace(other error) error {
 		return nil
 	}
 	err := &Err{previous: other, cause: Cause(other)}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -82,7 +82,7 @@ func Annotate(other error, message string) error {
 		cause:    Cause(other),
 		message:  message,
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -104,7 +104,7 @@ func Annotatef(other error, format string, args ...interface{}) error {
 		cause:    Cause(other),
 		message:  fmt.Sprintf(format, args...),
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -126,7 +126,7 @@ func DeferredAnnotatef(err *error, format string, args ...interface{}) {
 		cause:    Cause(*err),
 		previous: *err,
 	}
-	newErr.SetLocation(1)
+	SetLocation(newErr, 3)
 	*err = newErr
 }
 
@@ -144,7 +144,7 @@ func Wrap(other, newDescriptive error) error {
 		previous: other,
 		cause:    newDescriptive,
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -162,7 +162,7 @@ func Wrapf(other, newDescriptive error, format string, args ...interface{}) erro
 		previous: other,
 		cause:    newDescriptive,
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -178,7 +178,7 @@ func Maskf(other error, format string, args ...interface{}) error {
 		message:  fmt.Sprintf(format, args...),
 		previous: other,
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 
@@ -190,7 +190,7 @@ func Mask(other error) error {
 	err := &Err{
 		previous: other,
 	}
-	err.SetLocation(1)
+	SetLocation(err, 3)
 	return err
 }
 

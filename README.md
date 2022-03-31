@@ -586,7 +586,7 @@ For example:
 	
 	func NewFooError(code int) error {
 	    err := &FooError{errors.NewErr("foo"), code}
-	    err.SetLocation(1)
+	    SetLocation(err, 3)
 	    return err
 	}
 
@@ -609,7 +609,7 @@ For example:
 	
 	func (e *FooError) Annotate(format string, args ...interface{}) error {
 	    err := &FooError{errors.NewErrWithCause(e.Err, format, args...), e.code}
-	    err.SetLocation(1)
+	    SetLocation(err, 3)
 	    return err
 	})
 

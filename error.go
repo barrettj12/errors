@@ -64,9 +64,9 @@ func newLocationError(err error, callDepth int) *locationError {
 // Error implementes the error interface.
 func (l *locationError) Error() string {
 	if l.error == nil {
-		return ""
+		return l.function + fmt.Sprint(l.line)
 	}
-	return l.error.Error()
+	return l.function + fmt.Sprint(l.line) + l.error.Error()
 }
 
 // *locationError implements Locationer.Location interface
@@ -90,7 +90,7 @@ func (l *locationError) Unwrap() error {
 //
 //     func NewFooError(code int) error {
 //         err := &FooError{errors.NewErr("foo"), code}
-//         err.SetLocation(1)
+//         SetLocation(err, 2)
 //         return err
 //     }
 func NewErr(format string, args ...interface{}) Err {
@@ -111,7 +111,7 @@ func NewErr(format string, args ...interface{}) Err {
 //
 //     func (e *FooError) Annotate(format string, args ...interface{}) error {
 //         err := &FooError{errors.NewErrWithCause(e.Err, format, args...), e.code}
-//         err.SetLocation(1)
+//         SetLocation(err, 2)
 //         return err
 //     })
 func NewErrWithCause(other error, format string, args ...interface{}) Err {
